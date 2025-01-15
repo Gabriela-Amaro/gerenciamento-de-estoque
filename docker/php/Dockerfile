@@ -17,6 +17,9 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli gd opcache intl zip calendar dom
 RUN wget https://get.symfony.com/cli/installer -O - | bash && \
     mv /root/.symfony*/bin/symfony /usr/local/bin/symfony
 
-WORKDIR /var/www
+RUN composer require symfony/orm-pack \
+    && composer require --dev symfony/maker-bundle
 
 RUN chmod -R 777 /var/www
+
+WORKDIR /var/www/stock_man
