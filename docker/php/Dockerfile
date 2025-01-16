@@ -8,6 +8,8 @@ RUN apt-get update \
     && apt-get install -qq -y --no-install-recommends \
     wget locales coreutils apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev;
 
+RUN chmod -R 777 /var/www
+
 RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
    mv composer.phar /usr/local/bin/composer
 
@@ -19,9 +21,6 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && \
 
 WORKDIR /var/www/stock_man
 
-
 RUN composer require symfony/orm-pack \
     && composer require --dev symfony/maker-bundle \
     && composer install
-
-RUN chmod -R 777 /var/www
