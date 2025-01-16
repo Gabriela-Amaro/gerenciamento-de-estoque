@@ -17,14 +17,13 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && \
 
 COPY ./stock_man /var/www/stock_man/
 
-RUN chmod -R 777 /var/www
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 777 /var/www
 
 RUN git config --global --add safe.directory /var/www
-
-RUN chown -R www-data:www-data /var/www/stock_man
 
 WORKDIR /var/www/stock_man
 
 RUN composer require symfony/orm-pack \
     && composer require --dev symfony/maker-bundle \
-    && composer install --no-interaction --optimize-autoloader --prefer-dist --no-cache
+    && composer install
