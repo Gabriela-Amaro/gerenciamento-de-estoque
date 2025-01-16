@@ -10,7 +10,7 @@ services:
         environment:
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         networks:
-            - app
+            - stock_network
 
     # phpmyadmin container
     phpmyadmin:
@@ -24,12 +24,12 @@ services:
         environment:
             PMA_HOST: db
         networks:
-            - app
+            - stock_network
 
-    # Symfony apache project container
-    symfony_apache:
+    # stock project container
+    stock:
         build: .
-        container_name: symfony_apache
+        container_name: stock
         ports:
           - "8741:80"
         volumes:
@@ -37,10 +37,10 @@ services:
             - ./:/var/www
         restart: always
         networks:
-            - app
+            - stock_network
 
 networks:
-    app:
+    stock_network:
 
 volumes:
     db-data:

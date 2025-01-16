@@ -25,5 +25,5 @@ RUN git config --global --add safe.directory /var/www
 WORKDIR /var/www/stock_man
 
 RUN composer require symfony/orm-pack \
-    && composer require --dev symfony/maker-bundle \
-    && composer install
+    && composer require --dev symfony/maker-bundle 
+    # && composer install
