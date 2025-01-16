@@ -31,9 +31,9 @@ erDiagram
         int produto_fk
     }
     transacao ||--o{ produto_venda : "está em"
-    produto_total ||--o{ produto_venda : "vende"
+    produto ||--o{ produto_venda : "vende"
 
-    produto_total {
+    produto {
         int id
         string nome
         string categoria
@@ -50,7 +50,7 @@ erDiagram
         int produto_fk
         int usuario_fk
     }
-    produto_total ||--o{ lote : "recebe"
+    produto ||--o{ lote : "recebe"
     usuario ||--o{ lote : "cria"
 
     produto_unitario {
