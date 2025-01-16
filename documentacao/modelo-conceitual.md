@@ -2,27 +2,19 @@
 
 ```mermaid
 erDiagram
-    usuario {
-        int id
-        string email
-        string senha
-        string cargo
-        int funcionario_fk
-    }
-
     funcionario {
         int id
         string nome
+        string email
+        string senha
         string cargo
     }
-    usuario ||--o| funcionario : "pertence a"
 
     transacao {
         int id
         date data
         int funcionario_fk
     }
-    funcionario ||--o{ transacao : "é feita por"
 
     produto_venda {
         int id
@@ -30,14 +22,10 @@ erDiagram
         int transacao_fk
         int produto_fk
     }
-    transacao ||--o{ produto_venda : "está em"
-    produto ||--o{ produto_venda : "vende"
 
-    produto {
+    produto_unitario {
         int id
-        string nome
-        string categoria
-        int quantidade
+        int lote_fk
     }
 
     lote {
@@ -48,14 +36,20 @@ erDiagram
         date validade
         int quantidade_inicial
         int produto_fk
-        int usuario_fk
+        int funcionario_fk
     }
-    produto ||--o{ lote : "recebe"
-    usuario ||--o{ lote : "cria"
 
-    produto_unitario {
+    produto {
         int id
-        int lote_fk
+        string nome
+        string categoria
+        int quantidade
     }
+
+    funcionario ||--o{ lote : "cria"
     lote ||--o| produto_unitario : "possui"
+    funcionario ||--o{ transacao : "é feita por"
+    transacao ||--o{ produto_venda : "está em"
+    produto ||--o{ lote : "recebe"
+    produto ||--o{ produto_venda : "é vendido"
 ```
