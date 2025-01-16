@@ -27,12 +27,12 @@ services:
 
     # Symfony apache project container
     symfony_apache:
-        build: docker/php
+        build: .
         container_name: symfony_apache
         ports:
           - "8741:80"
         volumes:
-            - ./docker/php/vhosts:/etc/apache2/sites-enabled
+            - ./vhosts:/etc/apache2/sites-enabled
             - ./:/var/www
         restart: always
         networks:
