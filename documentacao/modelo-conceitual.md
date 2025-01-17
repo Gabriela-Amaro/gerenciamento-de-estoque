@@ -23,11 +23,6 @@ erDiagram
         int produto_fk
     }
 
-    produto_unitario {
-        int id
-        int lote_fk
-    }
-
     lote {
         int id
         float preco_unitario
@@ -47,7 +42,6 @@ erDiagram
     }
 
     funcionario ||--o{ lote : "cria"
-    lote ||--o| produto_unitario : "possui"
     funcionario ||--o{ transacao : "faz"
     transacao ||--o{ saida : "está em"
     produto ||--o{ lote : "recebe"
