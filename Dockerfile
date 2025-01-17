@@ -26,4 +26,3 @@ WORKDIR /var/www/stock_man
 
 RUN composer require symfony/orm-pack \
     && composer require --dev symfony/maker-bundle 
-    # && composer install

@@ -6,9 +6,11 @@ services:
         restart: always
         volumes:
             - db-data:/var/lib/mysql
-            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
         environment:
-            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: app
+            MYSQL_USER: app
+            MYSQL_PASSWORD: app
         networks:
             - stock_network
 
@@ -31,7 +33,7 @@ services:
         build: .
         container_name: stock
         ports:
-          - "8741:80"
+            - "8741:80"
         volumes:
             - ./vhosts:/etc/apache2/sites-enabled
             - ./:/var/www
