@@ -16,7 +16,7 @@ erDiagram
         int funcionario_fk
     }
 
-    produto_venda {
+    saida {
         int id
         int quantidade
         int transacao_fk
@@ -48,8 +48,8 @@ erDiagram
 
     funcionario ||--o{ lote : "cria"
     lote ||--o| produto_unitario : "possui"
-    funcionario ||--o{ transacao : "é feita por"
-    transacao ||--o{ produto_venda : "está em"
+    funcionario ||--o{ transacao : "faz"
+    transacao ||--o{ saida : "está em"
     produto ||--o{ lote : "recebe"
-    produto ||--o{ produto_venda : "é vendido"
+    produto ||--o{ saida : "é retirado"
 ```
