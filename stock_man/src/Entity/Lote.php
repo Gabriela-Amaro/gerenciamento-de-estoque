@@ -21,9 +21,6 @@ class Lote
     private ?string $custo_unitario = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $data_entrada = null;
-
-    #[ORM\Column]
     private ?\DateTimeImmutable $validade = null;
 
     #[ORM\Column]
@@ -36,6 +33,9 @@ class Lote
     #[ORM\ManyToOne(inversedBy: 'lotes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?produto $produto_fk = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
 
     public function getId(): ?int
     {
@@ -62,18 +62,6 @@ class Lote
     public function setCustoUnitario(string $custo_unitario): static
     {
         $this->custo_unitario = $custo_unitario;
-
-        return $this;
-    }
-
-    public function getDataEntrada(): ?\DateTimeImmutable
-    {
-        return $this->data_entrada;
-    }
-
-    public function setDataEntrada(\DateTimeImmutable $data_entrada): static
-    {
-        $this->data_entrada = $data_entrada;
 
         return $this;
     }
@@ -122,6 +110,18 @@ class Lote
     public function setProdutoFk(?produto $produto_fk): static
     {
         $this->produto_fk = $produto_fk;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

@@ -24,6 +24,9 @@ class Saida
     #[ORM\JoinColumn(nullable: false)]
     private ?produto $produto_fk = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class Saida
     public function setProdutoFk(?produto $produto_fk): static
     {
         $this->produto_fk = $produto_fk;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
