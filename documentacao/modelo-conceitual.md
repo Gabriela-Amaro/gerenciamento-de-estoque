@@ -23,16 +23,11 @@ erDiagram
         int produto_fk
     }
 
-    produto_unitario {
-        int id
-        int lote_fk
-    }
-
     lote {
         int id
-        float preco
-        float custo
-        date data
+        float preco_unitario
+        float custo_unitario
+        date data_entrada
         date validade
         int quantidade_inicial
         int produto_fk
@@ -47,7 +42,6 @@ erDiagram
     }
 
     funcionario ||--o{ lote : "cria"
-    lote ||--o| produto_unitario : "possui"
     funcionario ||--o{ transacao : "faz"
     transacao ||--o{ saida : "está em"
     produto ||--o{ lote : "recebe"
