@@ -30,9 +30,9 @@ erDiagram
 
     lote {
         int id
-        float preco
-        float custo
-        date data
+        float preco_unitario
+        float custo_unitario
+        date data_entrada
         date validade
         int quantidade_inicial
         int produto_fk
