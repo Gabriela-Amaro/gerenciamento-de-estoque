@@ -10,3 +10,6 @@ docker compose up -d --build
 ```bash
 docker exec stock composer install
 ```
+```bash
+docker exec stock symfony console doctrine:migrations:migrate
+```
