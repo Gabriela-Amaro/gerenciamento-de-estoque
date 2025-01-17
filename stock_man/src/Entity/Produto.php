@@ -6,6 +6,7 @@ use App\Repository\ProdutoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\ProdutoCategoria;
 
 #[ORM\Entity(repositoryClass: ProdutoRepository::class)]
 class Produto
@@ -18,8 +19,8 @@ class Produto
     #[ORM\Column(length: 255)]
     private ?string $nome = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $categoria = null;
+    #[ORM\Column(type: 'integer', enumType: ProdutoCategoria::class)]
+    private ProdutoCategoria $categoria;
 
     #[ORM\Column]
     private ?int $quantidade = null;
@@ -59,12 +60,12 @@ class Produto
         return $this;
     }
 
-    public function getCategoria(): ?string
+    public function getCategoria(): ProdutoCategoria
     {
         return $this->categoria;
     }
 
-    public function setCategoria(string $categoria): static
+    public function setCategoria(ProdutoCategoria $categoria): static
     {
         $this->categoria = $categoria;
 

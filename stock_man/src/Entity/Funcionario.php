@@ -6,6 +6,7 @@ use App\Repository\FuncionarioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\FuncionarioCargo;
 
 #[ORM\Entity(repositoryClass: FuncionarioRepository::class)]
 class Funcionario
@@ -24,8 +25,8 @@ class Funcionario
     #[ORM\Column(length: 255)]
     private ?string $senha = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $cargo = null;
+    #[ORM\Column(type: 'integer', enumType: FuncionarioCargo::class)]
+    private FuncionarioCargo $cargo;
 
     /**
      * @var Collection<int, Lote>
@@ -86,12 +87,12 @@ class Funcionario
         return $this;
     }
 
-    public function getCargo(): ?string
+    public function getCargo(): FuncionarioCargo
     {
         return $this->cargo;
     }
 
-    public function setCargo(string $cargo): static
+    public function setCargo(FuncionarioCargo $cargo): static
     {
         $this->cargo = $cargo;
 
