@@ -3,15 +3,32 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+        {# {% block stylesheets %}
+        {% endblock %} #}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="bg-gray-100 text-gray-900">
+
+        <header class="bg-blue-500 text-white py-4">
+            <div class="container mx-auto px-4">
+                <h1 class="text-2xl font-bold">Meu Cabeçalho</h1>
+            </div>
+        </header>
+    
+        <main class="container mx-auto px-4 mt-6">
+            {% block body %}{% endblock %}
+        </main>
+    
+        <footer class="bg-gray-800 text-white py-4 mt-6">
+            <div class="container mx-auto px-4 text-center">
+                <p>&copy; 2025 Meu Site. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    
     </body>
 </html>
