@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --watch"
+    "build:css": "npx tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --watch"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +18,8 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "flowbite": "^2.5.2"
   }
 }

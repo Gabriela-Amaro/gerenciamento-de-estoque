@@ -40,8 +40,6 @@ services:
         restart: always
         networks:
             - stock_network
-        # command: >
-        #     sh -c "composer install"
 
 networks:
     stock_network:
