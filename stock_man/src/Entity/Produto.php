@@ -25,17 +25,17 @@ class Produto
     #[ORM\Column]
     private ?int $quantidade = null;
 
-    /**
-     * @var Collection<int, Lote>
-     */
-    #[ORM\OneToMany(targetEntity: Lote::class, mappedBy: 'produto_fk')]
-    private Collection $lotes;
+    // /**
+    //  * @var Collection<int, Lote>
+    //  */
+    // #[ORM\OneToMany(targetEntity: Lote::class, mappedBy: 'produto_fk')]
+    // private Collection $lotes;
 
-    /**
-     * @var Collection<int, Saida>
-     */
-    #[ORM\OneToMany(targetEntity: Saida::class, mappedBy: 'produto_fk')]
-    private Collection $saidas;
+    // /**
+    //  * @var Collection<int, Saida>
+    //  */
+    // #[ORM\OneToMany(targetEntity: Saida::class, mappedBy: 'produto_fk')]
+    // private Collection $saidas;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
