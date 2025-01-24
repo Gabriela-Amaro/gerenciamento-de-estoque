@@ -32,6 +32,7 @@ final class ProdutoController extends AbstractController
         $produto = new Produto();
         $produto->setNome($data['nome']);
         $produto->setCategoria($data['categoria']);
+        $produto->setDescricao($data['descricao']);
         $produto->setQuantidade(0);
         $produto->setCreatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
         $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
@@ -58,7 +59,7 @@ final class ProdutoController extends AbstractController
 
         $produto->setNome($data['nome']);
         $produto->setCategoria($data['categoria']);
-        $produto->setQuantidade($data['quantidade']);
+        $produto->setDescricao($data['descricao']);
         $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
 
         $entityManager->persist($produto);

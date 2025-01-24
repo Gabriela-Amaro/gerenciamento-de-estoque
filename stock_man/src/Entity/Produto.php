@@ -22,8 +22,17 @@ class Produto
     #[ORM\Column(type: 'integer', enumType: ProdutoCategoria::class)]
     private ProdutoCategoria $categoria;
 
+    #[ORM\Column(length: 255)]
+    private ?string $descricao = null;
+
     #[ORM\Column]
     private ?int $quantidade = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updated_at = null;
 
     // /**
     //  * @var Collection<int, Lote>
@@ -37,17 +46,11 @@ class Produto
     // #[ORM\OneToMany(targetEntity: Saida::class, mappedBy: 'produto_fk')]
     // private Collection $saidas;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
-
-    public function __construct()
-    {
-        $this->lotes = new ArrayCollection();
-        $this->saidas = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->lotes = new ArrayCollection();
+    //     $this->saidas = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -78,6 +81,18 @@ class Produto
         return $this;
     }
 
+    public function getDescricao(): ?string
+    {
+        return $this->descricao;
+    }
+
+    public function setDescricao(string $descricao): static
+    {
+        $this->descricao = $descricao;
+
+        return $this;
+    }
+
     public function getQuantidade(): ?int
     {
         return $this->quantidade;
@@ -86,66 +101,6 @@ class Produto
     public function setQuantidade(int $quantidade): static
     {
         $this->quantidade = $quantidade;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Lote>
-     */
-    public function getLotes(): Collection
-    {
-        return $this->lotes;
-    }
-
-    public function addLote(Lote $lote): static
-    {
-        if (!$this->lotes->contains($lote)) {
-            $this->lotes->add($lote);
-            $lote->setProdutoFk($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLote(Lote $lote): static
-    {
-        if ($this->lotes->removeElement($lote)) {
-            // set the owning side to null (unless already changed)
-            if ($lote->getProdutoFk() === $this) {
-                $lote->setProdutoFk(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Saida>
-     */
-    public function getSaidas(): Collection
-    {
-        return $this->saidas;
-    }
-
-    public function addSaida(Saida $saida): static
-    {
-        if (!$this->saidas->contains($saida)) {
-            $this->saidas->add($saida);
-            $saida->setProdutoFk($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSaida(Saida $saida): static
-    {
-        if ($this->saidas->removeElement($saida)) {
-            // set the owning side to null (unless already changed)
-            if ($saida->getProdutoFk() === $this) {
-                $saida->setProdutoFk(null);
-            }
-        }
 
         return $this;
     }
@@ -173,4 +128,64 @@ class Produto
 
         return $this;
     }
+
+    // /**
+    //  * @return Collection<int, Lote>
+    //  */
+    // public function getLotes(): Collection
+    // {
+    //     return $this->lotes;
+    // }
+
+    // public function addLote(Lote $lote): static
+    // {
+    //     if (!$this->lotes->contains($lote)) {
+    //         $this->lotes->add($lote);
+    //         $lote->setProdutoFk($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeLote(Lote $lote): static
+    // {
+    //     if ($this->lotes->removeElement($lote)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($lote->getProdutoFk() === $this) {
+    //             $lote->setProdutoFk(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    // /**
+    //  * @return Collection<int, Saida>
+    //  */
+    // public function getSaidas(): Collection
+    // {
+    //     return $this->saidas;
+    // }
+
+    // public function addSaida(Saida $saida): static
+    // {
+    //     if (!$this->saidas->contains($saida)) {
+    //         $this->saidas->add($saida);
+    //         $saida->setProdutoFk($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeSaida(Saida $saida): static
+    // {
+    //     if ($this->saidas->removeElement($saida)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($saida->getProdutoFk() === $this) {
+    //             $saida->setProdutoFk(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
 }
