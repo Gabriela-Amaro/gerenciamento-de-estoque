@@ -6,6 +6,7 @@ module.exports = {
     './templates/**/*.html.twig', 
     './assets/**/*.js',
     "./node_modules/flowbite/**/*.js",
+    "./assets/**/*.css",
   ],
   theme: {
     extend: {
