@@ -10,20 +10,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: {
-          light: '#ffffff', // Cor clara
-          dark: '#1e293b',  // Cor escura
-        },
-        text: {
-          light: '#000000', // Texto claro
-          dark: '#f1f5f9',  // Texto escuro
-        },
-      },
+      colors: {},
     },
   },
-  plugins: [
-    require('flowbite/plugin')
-  ],
+  plugins: [],
 }
 
