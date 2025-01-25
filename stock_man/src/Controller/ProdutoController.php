@@ -9,25 +9,34 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use DateTimeZone;
+use App\Enum\ProdutoCategoria;
 
 final class ProdutoController extends AbstractController
 {
-    #[Route('/produto', name: 'produto_list')]
+    #[Route('/produto', name: 'produto_list', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $repository = $entityManager->getRepository(Produto::class);
 
         $produtos = $repository->findAll();
 
+        // Pega as opções do enum
+        $categorias = ProdutoCategoria::getOptions();
+
         return $this->render('produto/index.html.twig', [
             'produtos' => $produtos,
+            'categorias' => $categorias,
         ]);
     }
 
-    #[Route('/produto/create', name: 'produto_create')]
+    #[Route('/produto', name: 'produto_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $data = $request->request->all();
+        if($request->headers->get('Content-Type') == 'application/json'){
+            $data = $request->toArray();
+        } else {
+            $data = $request->request->all();
+        }
 
         $produto = new Produto();
         $produto->setNome($data['nome']);
@@ -41,9 +50,9 @@ final class ProdutoController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->render('produto/index.html.twig', [
-            'produto' => $produto,
-        ]);
+        return $this->json([
+            'message' => 'usuario criado com o id '.$produto->getId(),
+        ], 201);
     }
     
     #[Route('/produto/{id}', name: 'produto_update')]

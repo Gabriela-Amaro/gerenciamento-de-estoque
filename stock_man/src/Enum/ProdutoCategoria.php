@@ -20,4 +20,12 @@ enum ProdutoCategoria: int
             self::CATEGORIA5 => "Categoria 5",
         };
     }
+
+    public static function getOptions(): array
+    {
+        return array_map(fn(self $categoria) => [
+            'value' => $categoria->value,
+            'descricao' => $categoria->getDescription(),
+        ], self::cases());
+    }
 }
