@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/app.css') }}"> 
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.0.0/dist/flowbite.min.css" rel="stylesheet"/>
     </head>
-    <body class="bg-primary-light text-text-light dark:bg-primary-dark dark:text-text-dark">
+    <body class="bg-white text-text-light dark:bg-gray-800 dark:text-text-dark">
         <header class="">
             <nav class="bg-gray-200 border-gray-200 dark:bg-gray-900">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -15,7 +15,7 @@
                             <path d="M12.013 6.175 7.006 9.369l5.007 3.194-5.007 3.193L2 12.545l5.006-3.193L2 6.175l5.006-3.194 5.007 3.194ZM6.981 17.806l5.006-3.193 5.006 3.193L11.987 21l-5.006-3.194Z"/>
                             <path d="m12.013 12.545 5.006-3.194-5.006-3.176 4.98-3.194L22 6.175l-5.007 3.194L22 12.562l-5.007 3.194-4.98-3.211Z"/>
                         </svg>                          
-                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Stock</span>
+                        <span class="self-center text-2xl text-gray-800 font-semibold whitespace-nowrap dark:text-white">Stock</span>
                     </a>
                     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         <button id="toggle-dark-mode" class="px-5">
