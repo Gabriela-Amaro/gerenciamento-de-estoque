@@ -83,6 +83,21 @@
                 </div>
             </nav>
         </header>
+
+        {# Flash Messages #}
+        <div id="flash-messages" class="max-w-screen-xl mx-auto p-4">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash-message mb-4 p-4 rounded-lg {% if label == 'success' %}bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100{% else %}bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100{% endif %} relative" role="alert">
+                        <span class="block sm:inline">{{ message }}</span>
+                        <button type="button" class="absolute top-0 right-0 p-4 close-flash" aria-label="Close">
+                            <span class="text-2x2" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
         <main>
             {% block body %}{% endblock %}
         </main>
@@ -151,6 +166,63 @@
                     localStorage.setItem('theme', 'dark'); // Salva a preferência como "dark"
                 }
                 updateButtonIcon();
+            });
+
+            // Gerenciamento de Flash Messages
+            document.addEventListener('DOMContentLoaded', function() {
+                // Função para fechar mensagem flash com animação
+                function closeFlashMessage(element) {
+                    element.style.transition = 'opacity 300ms ease-in-out';
+                    element.style.opacity = '0';
+                    setTimeout(() => {
+                        element.remove();
+                    }, 300);
+                }
+
+                // Adiciona evento de clique para todos os botões de fechar
+                document.querySelectorAll('.close-flash').forEach(button => {
+                    button.addEventListener('click', function() {
+                        closeFlashMessage(this.parentElement);
+                    });
+                });
+
+                // Auto-fechar após 5 segundos
+                document.querySelectorAll('.flash-message').forEach(message => {
+                    setTimeout(() => {
+                        closeFlashMessage(message);
+                    }, 5000);
+                });
+
+                // Função global para criar flash messages dinamicamente
+                window.createFlashMessage = function(message, type = 'success') {
+                    const flashContainer = document.getElementById('flash-messages');
+                    const messageDiv = document.createElement('div');
+                    
+                    messageDiv.className = `flash-message mb-4 p-4 rounded-lg ${
+                        type === 'success' 
+                            ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                            : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+                    } relative`;
+                    
+                    messageDiv.innerHTML = `
+                        <span class="block sm:inline">${message}</span>
+                        <button type="button" class="absolute top-0 right-0 p-4 close-flash" aria-label="Close">
+                            <span class="text-2x2" aria-hidden="true">&times;</span>
+                        </button>
+                    `;
+                    
+                    flashContainer.appendChild(messageDiv);
+
+                    // Adicionar evento de clique para o botão fechar
+                    messageDiv.querySelector('.close-flash').addEventListener('click', function() {
+                        closeFlashMessage(messageDiv);
+                    });
+
+                    // Auto-fechar após 5 segundos
+                    setTimeout(() => {
+                        closeFlashMessage(messageDiv);
+                    }, 5000);
+                }
             });
         </script>
     </body>
