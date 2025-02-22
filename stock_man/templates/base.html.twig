@@ -3,9 +3,17 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {# <link rel="stylesheet" href="{{ asset('build/app.css') }}">  #}
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {}
+                }
+            }
+        </script>
     </head>
-    <body class="bg-white text-text-light dark:bg-gray-800 dark:text-text-dark">
+    <body class="bg-white text-text-light dark:bg-slate-800 dark:text-text-dark">
         <header class="">
             <nav class="bg-gray-200 border-gray-200 dark:bg-gray-900">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
