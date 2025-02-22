@@ -8,31 +8,41 @@
        padding-left: 2.5rem;
     }
 </style>
+
+{# Mensagens de sucesso #}
 {% for message in app.flashes('success') %}
     <div class="alert alert-success">
         {{ message }}
     </div>
 {% endfor %}
+
+{# Container principal #}
 <div class="max-w-screen-xl mx-auto p-4">
+    {# Container flexível #}
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        {# Pesquisar #}
+        {# Campo de pesquisa #}
         <div class="relative">
             <div class="absolute inset-y-0 left-0 p-2 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
             </div>
-            <input type="text" id="table-search" class="block p-2 pl-10 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesquisar">
+            <input type="text" 
+                   id="table-search" 
+                   name="search"
+                   value="{{ app.request.query.get('search') }}"
+                   class="block p-2 pl-10 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" 
+                   placeholder="Pesquisar">
         </div>
-        <!-- Modal toggle -->
+        {# Botão de cadastro #}
         <button data-modal-target="produto-modal" data-modal-toggle="produto-modal" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
             Cadastrar Produto
         </button>
         
-        <!-- Main modal -->
+        {# Modal de cadastro #}
         <div id="produto-modal" tabindex="-1" class="hidden flex fixed inset-0 z-10 items-center justify-center bg-gray-900/50">
             <div class="w-full max-w-md mx-auto p-6">
-                <!-- Modal content -->
+                {# Conteúdo do modal #}
                 <div class="bg-neutral-50 rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
+                    {# Cabeçalho do modal #}
                     <div class="flex items-center justify-between p-4">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Criar novo produto</h3>
                         <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1 dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="produto-modal">
@@ -42,15 +52,15 @@
                             <span class="sr-only">Fechar</span>
                         </button>
                     </div>
-                    <!-- Modal body -->
+                    {# Corpo do modal #}
                     <form id="criar-produto" class="p-4">
-                        <!-- Nome -->
+                        {# Campo de nome #}
                         <div class="mt-2">
                             <label for="nome" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome</label>
                             <input type="text" id="nome" name="nome" placeholder="Digite o nome do produto" required
                                 class="w-full p-3 text-sm border border-gray-400 rounded-lg bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white focus:ring-primary-500 focus:border-primary-500">
                         </div>
-                        <!-- Categoria -->
+                        {# Campo de categoria #}
                         <div class="mt-2">
                             <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
                             <select id="categoria" name="categoria" class="w-full p-2.5 text-sm border border-gray-400 rounded-lg bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white focus:ring-primary-500 focus:border-primary-500" required>
@@ -60,13 +70,13 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <!-- Descrição -->
+                        {# Campo de descrição #}
                         <div class="mt-2">
                             <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descrição do Produto</label>
                             <textarea id="descricao" name="descricao" rows="4" placeholder="Escreva a descrição do produto" required
                                 class="w-full p-3 text-sm border border-gray-400 rounded-lg bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
                         </div>
-                        <!-- Botão -->
+                        {# Botão de cadastro #}
                         <button type="submit" class="mt-2 w-full py-2.5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm font-medium dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             <svg class="inline w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
@@ -78,141 +88,16 @@
             </div>
         </div>
     </div>
-    {# Tabela de produtos #}
-    <div class="w-full relative overflow-x-auto sm:rounded-lg">
-        <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400 shadow-md">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-2 py-3">
-                        ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nome
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Categoria
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Descrição
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Quantidade
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        <span class="">Ação</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-neutral-50 dark:bg-gray-800">
-                {% for produto in produtos %}
-                    <tr class="border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <td class="px-2 py-3">
-                            {{ produto.id }}
-                        </td>
-                        <td scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ produto.nome }}
-                        </td>
-                        <td class="px-6 py-3">
-                            {{ produto.categoria.getDescription() }}
-                        </td>
-                        <td class="px-6 py-3">
-                            {{ produto.descricao }}
-                        </td>
-                        <td class="px-6 py-3">
-                            {{ produto.quantidade }}
-                        </td>
-                        <td class="px-6 py-3">
-                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-            <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-                Mostrando 
-                <span class="font-semibold text-gray-900 dark:text-white">
-                    {{ ((currentPage - 1) * limit) + 1 }}-{{ min(currentPage * limit, total) }}
-                </span> 
-                de 
-                <span class="font-semibold text-gray-900 dark:text-white">{{ total }}</span>
-            </span>
-            
-            <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                {# Botão Previous #}
-                <li>
-                    <a href="{{ currentPage > 1 ? path('produtos_list', {page: currentPage - 1}) : '#' }}"
-                       class="flex items-center justify-center px-3 h-8 ms-0 leading-tight {{ currentPage > 1 
-                           ? 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700' 
-                           : 'text-gray-300 cursor-not-allowed' }} 
-                           border border-gray-300 rounded-s-lg 
-                           dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                        Anterior
-                    </a>
-                </li>
 
-                {# Números das páginas #}
-                {% set start = max(1, currentPage - 2) %}
-                {% set end = min(totalPages, currentPage + 2) %}
+    {# Include da tabela #}
+    {% include 'produto/_table.html.twig' with {
+        'produtos': produtos,
+        'currentPage': currentPage,
+        'totalPages': totalPages,
+        'total': total,
+        'limit': limit
+    } %}
 
-                {% if start > 1 %}
-                    <li>
-                        <a href="{{ path('produtos_list', {page: 1}) }}" 
-                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            1
-                        </a>
-                    </li>
-                    {% if start > 2 %}
-                        <li>
-                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
-                                ...
-                            </span>
-                        </li>
-                    {% endif %}
-                {% endif %}
-
-                {% for i in start..end %}
-                    <li>
-                        <a href="{{ path('produtos_list', {page: i}) }}"
-                           class="flex items-center justify-center px-3 h-8 leading-tight {{ currentPage == i 
-                               ? 'text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' 
-                               : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700' }} 
-                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            {{ i }}
-                        </a>
-                    </li>
-                {% endfor %}
-
-                {% if end < totalPages %}
-                    {% if end < totalPages - 1 %}
-                        <li>
-                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
-                                ...
-                            </span>
-                        </li>
-                    {% endif %}
-                    <li>
-                        <a href="{{ path('produtos_list', {page: totalPages}) }}"
-                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            {{ totalPages }}
-                        </a>
-                    </li>
-                {% endif %}
-
-                {# Botão Next #}
-                <li>
-                    <a href="{{ currentPage < totalPages ? path('produtos_list', {page: currentPage + 1}) : '#' }}"
-                       class="flex items-center justify-center px-3 h-8 leading-tight {{ currentPage < totalPages 
-                           ? 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700' 
-                           : 'text-gray-300 cursor-not-allowed' }} 
-                           border border-gray-300 rounded-e-lg 
-                           dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                        Próximo
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
 </div>
 
 <script>
@@ -220,7 +105,7 @@
     const openModalButton = document.querySelector('[data-modal-toggle="produto-modal"]');
     const modal = document.getElementById('produto-modal');
     const form = document.getElementById('criar-produto');
-    // const searchInput = document.getElementById('table-search');
+    const searchInput = document.getElementById('table-search');
 
     const fecharModal = () => {
         modal.classList.add('hidden');
@@ -282,5 +167,52 @@
             createFlashMessage('Erro ao processar a requisição.', 'error');
         });
     };
+
+    // Função para pesquisar sem recarregar a página
+    let timeoutId;
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timeoutId);
+        
+        timeoutId = setTimeout(() => {
+            const searchValue = searchInput.value.trim();
+            const currentUrl = new URL(window.location.href);
+            
+            // Atualizar URL sem recarregar a página
+            updateUrlParam('search', searchValue);
+            updateUrlParam('page', '1');
+            
+            // Fazer requisição AJAX
+            fetch(`/produto?search=${encodeURIComponent(searchValue)}&page=1`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                // Atualizar apenas a tabela e a paginação
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                const newTable = doc.querySelector('#table-produtos');
+                const currentTable = document.querySelector('#table-produtos');
+                
+                if (newTable && currentTable) {
+                    currentTable.innerHTML = newTable.innerHTML;
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+        }, 200); 
+    });
+
+    // Função para atualizar a URL sem recarregar a página
+    function updateUrlParam(key, value) {
+        const url = new URL(window.location.href);
+        if (value) {
+            url.searchParams.set(key, value);
+        } else {
+            url.searchParams.delete(key);
+        }
+        window.history.pushState({}, '', url);
+    }
 </script>
 {% endblock %}

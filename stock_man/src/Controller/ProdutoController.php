@@ -19,29 +19,44 @@ final class ProdutoController extends AbstractController
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
+        $search = $request->query->get('search', '');
         $limit = 10;
 
         $repository = $entityManager->getRepository(Produto::class);
         
-        // Obter o total de produtos
-        $total = $repository->count([]);
+        // Criar QueryBuilder para busca flexível
+        $qb = $repository->createQueryBuilder('p')
+            ->orderBy('p.id', 'DESC');
         
-        // Calcular o total de páginas
+        // Se houver uma busca, adiciona o filtro
+        if ($search) {
+            $qb->where('LOWER(p.nome) LIKE LOWER(:search)')
+               ->setParameter('search', '%' . $search . '%');
+        }
+        
+        // Obter total de produtos com filtro
+        $total = count($qb->getQuery()->getResult());
+        
+        // Aplicar paginação
+        $qb->setFirstResult(($page - 1) * $limit)
+           ->setMaxResults($limit);
+        
+        $produtos = $qb->getQuery()->getResult();
         $totalPages = ceil($total / $limit);
-        
-        // Calcular o offset
-        $offset = ($page - 1) * $limit;
-        
-        // Buscar produtos paginados
-        $produtos = $repository->findBy(
-            [], // critérios
-            ['id' => 'DESC'], // ordenação
-            $limit, // limite
-            $offset // offset
-        );
 
         // Pega as opções do enum
         $categorias = ProdutoCategoria::getOptions();
+
+        // Se for uma requisição AJAX, renderiza apenas o template parcial
+        if ($request->headers->get('X-Requested-With') === 'XMLHttpRequest') {
+            return $this->render('produto/_table.html.twig', [
+                'produtos' => $produtos,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'total' => $total,
+                'limit' => $limit
+            ]);
+        }
 
         return $this->render('produto/index.html.twig', [
             'produtos' => $produtos,
