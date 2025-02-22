@@ -40,28 +40,39 @@ final class ProdutoController extends AbstractController
             $data = $request->request->all();
         }
 
-        // converte a categoria
-        $categoria = ProdutoCategoria::tryFrom($data['categoria']); // Tenta converter a string para enum
+        try {
+            // converte a categoria
+            $categoria = ProdutoCategoria::tryFrom($data['categoria']);
 
-        if (!$categoria) {
-            throw new \InvalidArgumentException("Categoria inválida!"); // Trate o caso de falha na conversão
+            if (!$categoria) {
+                throw new \InvalidArgumentException("Categoria inválida!");
+            }
+
+            $produto = new Produto();
+            $produto->setNome($data['nome']);
+            $produto->setCategoria($categoria);
+            $produto->setDescricao($data['descricao']);
+            $produto->setQuantidade(0);
+            $produto->setCreatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
+            $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
+
+            $entityManager->persist($produto);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Produto criado com sucesso!');
+
+            return $this->json([
+                'message' => 'Produto criado com sucesso!',
+                'status' => 'success'
+            ], 201);
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erro ao criar produto: ' . $e->getMessage());
+            
+            return $this->json([
+                'message' => 'Erro ao criar produto: ' . $e->getMessage(),
+                'status' => 'error'
+            ], 400);
         }
-
-        $produto = new Produto();
-        $produto->setNome($data['nome']);
-        $produto->setCategoria($categoria);
-        $produto->setDescricao($data['descricao']);
-        $produto->setQuantidade(0);
-        $produto->setCreatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
-        $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
-
-        $entityManager->persist($produto);
-
-        $entityManager->flush();
-
-        return $this->json([
-            'message' => 'Produto criado com sucesso!',
-        ], 201);
     }
     
     #[Route('/produto/{id}', name: 'produto_update')]
