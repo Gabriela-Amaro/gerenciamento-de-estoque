@@ -16,11 +16,29 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 final class ProdutoController extends AbstractController
 {
     #[Route('/produto', name: 'produtos_list', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $repository = $entityManager->getRepository(Produto::class);
+        $page = $request->query->getInt('page', 1);
+        $limit = 10;
 
-        $produtos = $repository->findAll();
+        $repository = $entityManager->getRepository(Produto::class);
+        
+        // Obter o total de produtos
+        $total = $repository->count([]);
+        
+        // Calcular o total de páginas
+        $totalPages = ceil($total / $limit);
+        
+        // Calcular o offset
+        $offset = ($page - 1) * $limit;
+        
+        // Buscar produtos paginados
+        $produtos = $repository->findBy(
+            [], // critérios
+            ['id' => 'DESC'], // ordenação
+            $limit, // limite
+            $offset // offset
+        );
 
         // Pega as opções do enum
         $categorias = ProdutoCategoria::getOptions();
@@ -28,6 +46,10 @@ final class ProdutoController extends AbstractController
         return $this->render('produto/index.html.twig', [
             'produtos' => $produtos,
             'categorias' => $categorias,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'total' => $total,
+            'limit' => $limit
         ]);
     }
 

@@ -128,28 +128,86 @@
             </tbody>
         </table>
         <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-            <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">1000</span></span>
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+                Mostrando 
+                <span class="font-semibold text-gray-900 dark:text-white">
+                    {{ ((currentPage - 1) * limit) + 1 }}-{{ min(currentPage * limit, total) }}
+                </span> 
+                de 
+                <span class="font-semibold text-gray-900 dark:text-white">{{ total }}</span>
+            </span>
+            
             <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                {# Botão Previous #}
                 <li>
-                    <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                    <a href="{{ currentPage > 1 ? path('produtos_list', {page: currentPage - 1}) : '#' }}"
+                       class="flex items-center justify-center px-3 h-8 ms-0 leading-tight {{ currentPage > 1 
+                           ? 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700' 
+                           : 'text-gray-300 cursor-not-allowed' }} 
+                           border border-gray-300 rounded-s-lg 
+                           dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        Anterior
+                    </a>
                 </li>
+
+                {# Números das páginas #}
+                {% set start = max(1, currentPage - 2) %}
+                {% set end = min(totalPages, currentPage + 2) %}
+
+                {% if start > 1 %}
+                    <li>
+                        <a href="{{ path('produtos_list', {page: 1}) }}" 
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            1
+                        </a>
+                    </li>
+                    {% if start > 2 %}
+                        <li>
+                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+                                ...
+                            </span>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% for i in start..end %}
+                    <li>
+                        <a href="{{ path('produtos_list', {page: i}) }}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight {{ currentPage == i 
+                               ? 'text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' 
+                               : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700' }} 
+                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            {{ i }}
+                        </a>
+                    </li>
+                {% endfor %}
+
+                {% if end < totalPages %}
+                    {% if end < totalPages - 1 %}
+                        <li>
+                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+                                ...
+                            </span>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="{{ path('produtos_list', {page: totalPages}) }}"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            {{ totalPages }}
+                        </a>
+                    </li>
+                {% endif %}
+
+                {# Botão Next #}
                 <li>
-                    <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-                </li>
-                <li>
-            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                    <a href="{{ currentPage < totalPages ? path('produtos_list', {page: currentPage + 1}) : '#' }}"
+                       class="flex items-center justify-center px-3 h-8 leading-tight {{ currentPage < totalPages 
+                           ? 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700' 
+                           : 'text-gray-300 cursor-not-allowed' }} 
+                           border border-gray-300 rounded-e-lg 
+                           dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        Próximo
+                    </a>
                 </li>
             </ul>
         </nav>
