@@ -143,7 +143,51 @@
         fecharModal();
     });
 
-    // Enviar dados ao backend
+    // Função ajax para atualizar a tabela
+    const atualizarTabela = async (url) => {
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            const html = await response.text();
+            
+            // Atualizar apenas a tabela
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            const newTable = doc.querySelector('#table-produtos');
+            const currentTable = document.querySelector('#table-produtos');
+            
+            if (newTable && currentTable) {
+                currentTable.innerHTML = newTable.innerHTML;
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar tabela:', error);
+            createFlashMessage('Erro ao atualizar a tabela.', 'error');
+        }
+    };
+
+    // Função para pesquisar sem recarregar a página
+    let timeoutId;
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timeoutId);
+        
+        timeoutId = setTimeout(() => {
+            const searchValue = searchInput.value.trim();
+            
+            // Atualiza a URL sem recarregar a página
+            updateUrlParam('search', searchValue);
+            updateUrlParam('page', '1');
+            
+            // Usa a função ajax para atualizar a tabela
+            const url = `/produto?search=${encodeURIComponent(searchValue)}&page=1`;
+            atualizarTabela(url);
+        }, 200); 
+    });
+
+    // Envia dados ao backend
     const enviarParaBackend = (objeto) => {
         fetch("/produto", {
             method: "POST",
@@ -154,14 +198,20 @@
         })
         .then(response => response.json())
         .then(data => {
-            // Usar a função global de flash message
+            // Usa a função global de flash message
             createFlashMessage(data.message, data.status);
 
-            // Recarregar a página apenas em caso de sucesso
+            // Se criou com sucesso, atualiza apenas a tabela
             if (data.status === 'success') {
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                // Reseta os parâmetros de busca e página
+                updateUrlParam('search', '');
+                updateUrlParam('page', '1');
+                
+                // Atualiza a tabela
+                atualizarTabela('/produto?page=1');
+                
+                // Fecha o modal
+                fecharModal();
             }
         })
         .catch((error) => {
@@ -169,42 +219,6 @@
             createFlashMessage('Erro ao processar a requisição.', 'error');
         });
     };
-
-    // Função para pesquisar sem recarregar a página
-    let timeoutId;
-    searchInput.addEventListener('input', () => {
-        clearTimeout(timeoutId);
-        
-        timeoutId = setTimeout(() => {
-            const searchValue = searchInput.value.trim();
-            const currentUrl = new URL(window.location.href);
-            
-            // Atualizar URL sem recarregar a página
-            updateUrlParam('search', searchValue);
-            updateUrlParam('page', '1');
-            
-            // Fazer requisição AJAX
-            fetch(`/produto?search=${encodeURIComponent(searchValue)}&page=1`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.text())
-            .then(html => {
-                // Atualizar apenas a tabela e a paginação
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                const newTable = doc.querySelector('#table-produtos');
-                const currentTable = document.querySelector('#table-produtos');
-                
-                if (newTable && currentTable) {
-                    currentTable.innerHTML = newTable.innerHTML;
-                }
-            })
-            .catch(error => console.error('Erro:', error));
-        }, 200); 
-    });
 
     // Função para atualizar a URL sem recarregar a página
     function updateUrlParam(key, value) {
