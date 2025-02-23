@@ -30,7 +30,7 @@
                    name="search"
                    value="{{ app.request.query.get('search') }}"
                    class="block p-2 pl-10 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" 
-                   placeholder="Pesquisar">
+                   placeholder="Pesquisar por nome ou categoria">
         </div>
         {# Botão de cadastro #}
         <button data-modal-target="produto-modal" data-modal-toggle="produto-modal" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
@@ -101,12 +101,13 @@
 </div>
 
 <script>
-    // Seleciona o botão e o modal pelo atributo data-modal-toggle
+    // Seleciona os elementos
     const openModalButton = document.querySelector('[data-modal-toggle="produto-modal"]');
     const modal = document.getElementById('produto-modal');
     const form = document.getElementById('criar-produto');
     const searchInput = document.getElementById('table-search');
 
+    // Função para fechar o modal
     const fecharModal = () => {
         modal.classList.add('hidden');
         form.reset();
@@ -123,6 +124,7 @@
         fecharModal();
     });
 
+    // Enviar dados do formulário
     form.addEventListener('submit', (event) => {
         event.preventDefault();
 

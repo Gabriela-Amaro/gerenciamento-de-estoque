@@ -12,6 +12,7 @@ use DateTimeZone;
 use App\Enum\ProdutoCategoria;
 use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Form\ProdutoType;
 
 final class ProdutoController extends AbstractController
 {
@@ -30,8 +31,25 @@ final class ProdutoController extends AbstractController
         
         // Se houver uma busca, adiciona o filtro
         if ($search) {
-            $qb->where('LOWER(p.nome) LIKE LOWER(:search)')
-               ->setParameter('search', '%' . $search . '%');
+            // Buscar todas as categorias que correspondem à pesquisa
+            $categoriasMatchingSearch = array_filter(
+                ProdutoCategoria::cases(),
+                fn($categoria) => str_contains(
+                    strtolower($categoria->getDescription()),
+                    strtolower($search)
+                )
+            );
+            
+            $categoriaValues = array_map(fn($cat) => $cat->value, $categoriasMatchingSearch);
+            
+            if (!empty($categoriaValues)) {
+                $qb->where('LOWER(p.nome) LIKE LOWER(:search) OR p.categoria IN (:categorias)')
+                   ->setParameter('search', '%' . $search . '%')
+                   ->setParameter('categorias', $categoriaValues);
+            } else {
+                $qb->where('LOWER(p.nome) LIKE LOWER(:search)')
+                   ->setParameter('search', '%' . $search . '%');
+            }
         }
         
         // Obter total de produtos com filtro
@@ -71,69 +89,86 @@ final class ProdutoController extends AbstractController
     #[Route('/produto', name: 'produto_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        if($request->headers->get('Content-Type') == 'application/json'){
-            $data = $request->toArray();
-        } else {
-            $data = $request->request->all();
-        }
-
+        $produto = new Produto();
+        $form = $this->createForm(ProdutoType::class, $produto);
+        
         try {
-            // converte a categoria
-            $categoria = ProdutoCategoria::tryFrom($data['categoria']);
+            $data = json_decode($request->getContent(), true);
+            $form->submit($data);
 
-            if (!$categoria) {
-                throw new \InvalidArgumentException("Categoria inválida!");
+            if ($form->isValid()) {
+                $produto->setQuantidade(0);
+                $produto->setCreatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
+                $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
+
+                $entityManager->persist($produto);
+                $entityManager->flush();
+
+                return $this->json([
+                    'message' => 'Produto criado com sucesso!',
+                    'status' => 'success'
+                ], 201);
             }
 
-            $produto = new Produto();
-            $produto->setNome($data['nome']);
-            $produto->setCategoria($categoria);
-            $produto->setDescricao($data['descricao']);
-            $produto->setQuantidade(0);
-            $produto->setCreatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
-            $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
-
-            $entityManager->persist($produto);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Produto criado com sucesso!');
+            // Se o formulário não for válido, retorna os erros
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getMessage();
+            }
 
             return $this->json([
-                'message' => 'Produto criado com sucesso!',
-                'status' => 'success'
-            ], 201);
+                'message' => 'Erro de validação',
+                'errors' => $errors,
+                'status' => 'error'
+            ], 400);
+
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Erro ao criar produto: ' . $e->getMessage());
-            
             return $this->json([
                 'message' => 'Erro ao criar produto: ' . $e->getMessage(),
                 'status' => 'error'
             ], 400);
         }
     }
-    
-    #[Route('/produto/{id}', name: 'produto_update')]
-    public function update(Request $request, EntityManagerInterface $entityManager, int $id): Response
+
+    #[Route('/produto/{id}', name: 'produto_update', methods: ['PUT'])]
+    public function update(Request $request, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
-        $repository = $entityManager->getRepository(Produto::class);
+        $produto = $entityManager->getRepository(Produto::class)->find($id);
 
-        $produto = $repository->find($id);
+        if (!$produto) {
+            return $this->json([
+                'message' => 'Produto não encontrado',
+                'status' => 'error'
+            ], 404);
+        }
 
-        if(!$produto) throw $this->createNotFoundException();
-
-        $data = $request->request->all();
-
-        $produto->setNome($data['nome']);
-        $produto->setCategoria($data['categoria']);
-        $produto->setDescricao($data['descricao']);
-        $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
-
-        $entityManager->persist($produto);
+        $form = $this->createForm(ProdutoType::class, $produto);
         
-        $entityManager->flush();
+        try {
+            $data = json_decode($request->getContent(), true);
+            $form->submit($data);
 
-        return $this->render('produto/index.html.twig', [
-            'produtos' => $produto,
-        ]);
+            if ($form->isValid()) {
+                $produto->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
+                $entityManager->flush();
+
+                return $this->json([
+                    'message' => 'Produto atualizado com sucesso!',
+                    'status' => 'success'
+                ]);
+            }
+
+            return $this->json([
+                'message' => 'Erro de validação',
+                'errors' => $form->getErrors(true),
+                'status' => 'error'
+            ], 400);
+
+        } catch (\Exception $e) {
+            return $this->json([
+                'message' => 'Erro ao atualizar produto: ' . $e->getMessage(),
+                'status' => 'error'
+            ], 400);
+        }
     }
 }
