@@ -25,13 +25,13 @@ final class ProdutoController extends AbstractController
 
         $repository = $entityManager->getRepository(Produto::class);
         
-        // Criar QueryBuilder para busca flexível
+        // Cria QueryBuilder para busca flexível
         $qb = $repository->createQueryBuilder('p')
             ->orderBy('p.id', 'DESC');
         
         // Se houver uma busca, adiciona o filtro
         if ($search) {
-            // Buscar todas as categorias que correspondem à pesquisa
+            // Busca todas as categorias que correspondem à pesquisa
             $categoriasMatchingSearch = array_filter(
                 ProdutoCategoria::cases(),
                 fn($categoria) => str_contains(
@@ -52,10 +52,10 @@ final class ProdutoController extends AbstractController
             }
         }
         
-        // Obter total de produtos com filtro
+        // Obtém o total de produtos com filtro
         $total = count($qb->getQuery()->getResult());
         
-        // Aplicar paginação
+        // Aplica a paginação
         $qb->setFirstResult(($page - 1) * $limit)
            ->setMaxResults($limit);
         

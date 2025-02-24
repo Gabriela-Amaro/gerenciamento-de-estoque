@@ -135,11 +135,11 @@
             descricao: form.descricao.value,
         };
 
-        // Exibir no console ou enviar para o backend
+        // Exibe no console e envia para o backend
         console.log("Objeto criado:", objetoCriado);
         enviarParaBackend(objetoCriado);
 
-        // Fechar o modal
+        // Fecha o modal
         fecharModal();
     });
 
@@ -198,8 +198,6 @@
         })
         .then(response => response.json())
         .then(data => {
-            // Usa a função global de flash message
-            createFlashMessage(data.message, data.status);
 
             // Se criou com sucesso, atualiza apenas a tabela
             if (data.status === 'success') {
@@ -212,6 +210,9 @@
                 
                 // Fecha o modal
                 fecharModal();
+
+                // Exibe a mensagem de sucesso
+                createFlashMessage(data.message, data.status);
             }
         })
         .catch((error) => {
