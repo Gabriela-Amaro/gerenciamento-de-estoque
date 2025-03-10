@@ -1,0 +1,50 @@
+{# Modal de cadastro #}
+<div id="produto-modal" tabindex="-1" class="hidden flex fixed inset-0 z-10 items-center justify-center bg-gray-900/50">
+    <div class="w-full max-w-md mx-auto p-6">
+        {# Conteúdo do modal #}
+        <div class="bg-neutral-50 rounded-lg shadow dark:bg-gray-700">
+            {# Cabeçalho do modal #}
+            <div class="flex items-center justify-between p-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white"> {{ titulo }} </h3>
+                <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1 dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="produto-modal">
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l6 6m0 0l6 6M7 7L1 13M7 7L13 1" />
+                    </svg>
+                    <span class="sr-only">Fechar</span>
+                </button>
+            </div>
+            {# Corpo do modal #}
+            <form id="criar-produto" class="p-4">
+                {# Campo de nome #}
+                <div class="mt-2">
+                    <label for="nome" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Digite o nome do produto" required
+                        class="w-full p-3 text-sm border border-gray-400 rounded-lg bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white focus:ring-primary-500 focus:border-primary-500">
+                </div>
+                {# Campo de categoria #}
+                <div class="mt-2">
+                    <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
+                    <select id="categoria" name="categoria" class="w-full p-2.5 text-sm border border-gray-400 rounded-lg bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white focus:ring-primary-500 focus:border-primary-500" required>
+                        <option value="" selected disabled>Selecione a categoria</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.value }}">{{ categoria.descricao }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {# Campo de descrição #}
+                <div class="mt-2">
+                    <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descrição do Produto</label>
+                    <textarea id="descricao" name="descricao" rows="4" placeholder="Escreva a descrição do produto" required
+                        class="w-full p-3 text-sm border border-gray-400 rounded-lg bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                {# Botão de cadastro #}
+                <button type="submit" class="mt-2 w-full py-2.5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm font-medium dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <svg class="inline w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ texto_botao }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
